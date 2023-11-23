@@ -1,10 +1,13 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+from courses.models import Course
+
 NULLABLE = {'null': True, 'blank': True}
 
+
 class User(AbstractUser):
-    username = models.CharField(max_length=35, verbose_name='name', **NULLABLE)
+    username = None
 
     email = models.EmailField(unique=True, verbose_name='Email')
 
@@ -14,4 +17,5 @@ class User(AbstractUser):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
+
 
