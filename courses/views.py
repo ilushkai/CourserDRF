@@ -3,7 +3,9 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
 from rest_framework import viewsets, generics
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
-
+from rest_framework import status
+from rest_framework.response import Response
+from courses.paginators import CoursePaginator
 from courses.permissions import IsModerator, IsOwner
 from courses.serializers import *
 from courses.models import *
@@ -12,6 +14,7 @@ from courses.models import *
 ### ViewSets for Course ###
 class CourseViewSet(viewsets.ModelViewSet):
     default_serializer = CourseSerializer
+    pagination_class = CoursePaginator
     queryset = Course.objects.annotate(lessons_count=Count('course'))
     serializers = {
         'list': CourseListSerializer,
@@ -40,13 +43,14 @@ class CourseViewSet(viewsets.ModelViewSet):
 class LessonCreateAPIView(generics.CreateAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-    permission_classes = [IsAuthenticated, IsAdminUser]
+    permission_classes = [IsAuthenticated, IsAdminUser | IsModerator ]
 
 
 # List
 class LessonListAPIView(generics.ListAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonListSerializer
+    pagination_class = CoursePaginator
     permission_classes = [IsAuthenticated]
 
 # Ditail
@@ -81,3 +85,18 @@ class PaymentsListAPIView(generics.ListAPIView):
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_fields = ('course', 'lesson')
     ordering_fields = ('date_of_payment', 'payment_method',)
+
+
+class SubscriptionCreateAPIView(generics.CreateAPIView):
+    serializer_class = SubscriptionSerializer
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        course_pk = self.kwargs.get('course_pk')
+
+        serializer = self.get_serializer(data={'user': request.user.pk, 'course': course_pk})
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response({'Вы подписались на курс.'}, status=status.HTTP_201_CREATED)
+
+

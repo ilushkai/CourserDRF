@@ -2,7 +2,8 @@ from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField, IntegerField
 from rest_framework.relations import SlugRelatedField
 
-from courses.models import Course, Lesson, Payments
+from courses.models import Course, Lesson, Payments, Subscription
+from courses.validators import validator_banned_links
 
 
 ########################## Courses serializers ###
@@ -37,6 +38,7 @@ class CourseDitailSerializer(serializers.ModelSerializer):
 ########################## Lessons serializers ###
 
 class LessonSerializer(serializers.ModelSerializer):
+    link = serializers.CharField(validators=[validator_banned_links], default=None)
     class Meta:
         model = Lesson
         fields = '__all__'  # ('title', 'description', 'preview' ,'link' ,'course')
@@ -72,3 +74,12 @@ class PaymentsSerializer(serializers.ModelSerializer):
         model = Payments
         fields = '__all__'  # ('user', 'date_of_payment', 'paid_course' ,'paid_lesson' ,'payment_sum', 'payment_method')
 
+
+class SubscriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subscription
+        fields = '__all__'
+
+        extra_kwargs = {
+            'user': {'required': False}
+        }
