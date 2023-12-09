@@ -11,6 +11,7 @@ class Course(models.Model):
     preview = models.ImageField(upload_to='courses/', **NULLABLE, verbose_name='превью')
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Создатель курса',
                               related_name='ownerCourse', **NULLABLE)
+    price = models.IntegerField(verbose_name='Цена', **NULLABLE)
 
     def __str__(self):
         return f'Название: {self.title} ({self.description})'
@@ -68,7 +69,7 @@ class Payments(models.Model):
         verbose_name_plural = 'Платежи'
 
 class Subscription(models.Model):
-    user = models.ForeignKey('users.User', on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True, blank=True)
     is_active = models.BooleanField(default=True, verbose_name='подписка')
 
