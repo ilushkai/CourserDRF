@@ -35,7 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'drf_yasg',
+    'drf_yasg',
 
     'rest_framework',
     'rest_framework_simplejwt',
@@ -44,9 +44,11 @@ INSTALLED_APPS = [
 
     'users',
     'courses',
+    'pay',
 ]
 
 MIDDLEWARE = [
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -83,9 +85,10 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'dbcourses',
+        'NAME': 'postgres',
         'USER': 'postgres',
-        'PASSWORD': 12345,
+        'PASSWORD': 'mysecretpassword',
+        'HOST': 'db',
     }
 }
 
@@ -149,4 +152,3 @@ CORS_ALLOWED_ORIGINS = [
 CSRF_TRUSTED_ORIGINS = [
     "https://read-and-write.example.com",  # от бэкэнда
 ]
-

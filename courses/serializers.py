@@ -1,8 +1,8 @@
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField, IntegerField
 from rest_framework.relations import SlugRelatedField
-
-from courses.models import Course, Lesson, Payments, Subscription
+from pay.models import Payments
+from courses.models import Course, Lesson, Subscription
 from courses.validators import validator_banned_links
 
 

@@ -38,35 +38,6 @@ class Lesson(models.Model):
         verbose_name_plural = 'Уроки'
 
 
-class PaymentType(models.Model):
-    name = models.CharField(null=True, max_length=25)
-    description = models.CharField(null=True, max_length=255)
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = "Способ оплаты"
-        verbose_name_plural = "Способы оплаты"
-
-
-class Payments(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, verbose_name='Пользователь',
-                             related_name='user')
-    date_of_payment = models.DateField(auto_now_add=True, verbose_name='Дата покупки')
-    paid_course = models.ForeignKey(Course, on_delete=models.PROTECT, verbose_name='оплаченный курс',
-                                    related_name='paid_course', **NULLABLE)
-    paid_lesson = models.ForeignKey(Lesson, on_delete=models.PROTECT, verbose_name='оплаченный Урок',
-                                    related_name='paid_lesson', **NULLABLE)
-    payment_sum = models.IntegerField(verbose_name='Сумма оплаты')
-    payment_method = models.ForeignKey(PaymentType, on_delete=models.PROTECT, **NULLABLE)
-
-    def __str__(self):
-        return f'Название: {self.user} - {self.paid_course}'
-
-    class Meta:
-        verbose_name = 'Платеж'
-        verbose_name_plural = 'Платежи'
 
 class Subscription(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)

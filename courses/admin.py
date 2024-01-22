@@ -1,5 +1,6 @@
 from django.contrib import admin
 from courses.models import *
+from pay.models import Payments
 
 
 @admin.register(Course)
@@ -12,11 +13,3 @@ class LessonAdmin(admin.ModelAdmin):
     list_display = ('title', 'description', 'preview', 'link', 'course',)
 
 
-@admin.register(PaymentType)
-class PaymentTypeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description',)
-
-
-@admin.register(Payments)
-class PaymentsAdmin(admin.ModelAdmin):
-    list_display = ('user', 'date_of_payment', 'paid_course', 'paid_lesson', 'payment_sum', 'payment_method',)
